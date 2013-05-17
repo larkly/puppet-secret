@@ -10,7 +10,7 @@ Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
   validate callee, "FQDN"
   validate secretid, "secret ID"
 
-  retrieve_secret( callee, secretid )
+  ensure_secret callee, secretid, opts
   
   # point the client to his secret
   return "puppet:///secrets/secret"
@@ -30,6 +30,6 @@ def validate sth, name
   end
 end
 
-def retrieve_secret callee, secretid
+def ensure_secret callee, secretid, opts = {}
   # do the secret defining action here...
 end

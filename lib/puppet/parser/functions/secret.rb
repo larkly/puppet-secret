@@ -1,6 +1,7 @@
 
 Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
-  secretid = vals[0] || 'default'
+  secretid = vals[0] || "default"
+  opts = vals[1] || {}
 
   # get the callee (secrets are saved based on fqdn)
   callee = lookupvar('fqdn')

@@ -64,7 +64,14 @@ def get_secrets_dir node, mount_point
 
   # make sure the secret folder exists
   if not File::exists? dir
-    FileUtils::mkdir_p dir
+    begin
+      FileUtils::mkdir_p dir
+    rescue Errno::EACCES
+      raise Puppet::ParserError,
+        "could not create secret folder '#{dir}' for mount point '#{mount_point}'. "+
+        "check your permissions and make sure puppet has write/create access to the location. "+
+        "can't generate secret without a secret folder."
+    end
   end
 
   # make sure it is a folder

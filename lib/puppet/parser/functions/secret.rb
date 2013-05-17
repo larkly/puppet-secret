@@ -15,6 +15,10 @@ end
 
 module Secret
   class << self
+    # global definitions, adjust to your liking
+    MAX_SECRET_BYTES = 10*1024
+    MIN_SECRET_BYTES = 1
+
 
     def ensure_secret callee, secretid, opts = {}
       # validate all user input
@@ -49,11 +53,16 @@ module Secret
 
     def generate_secret opts = {}
       require 'securerandom'
+
       # how bytes in the secret
       bytes = ( opts['bytes'] || 128 ).to_i
-      if bytes <= 0
-        raise Puppet::ParseError, "secrets cannot have a length of #{bytes} bytes (you provided '#{opts['bytes']}'). aborting."
+      if bytes < MIN_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
       end
+      if bytes > MAX_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      end
+
       # whether to base64 encode the secret
       base64 = ( opts['base64'] || false ) == true
 

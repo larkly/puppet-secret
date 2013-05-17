@@ -1,0 +1,2 @@
+name    'mksecret'
+version 'nightly'

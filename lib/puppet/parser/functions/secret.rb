@@ -39,9 +39,20 @@ def ensure_secret callee, secretid, opts = {}
 end
 
 def create_secret secret_file, opts = {}
-  f = File.new secret_file, 'w'
-  f.puts "hello world my dear node, from you favorite function!"
-  f.close
+  write_secret_to_file "hello world my dear node, from your favorite function!", secret_file
+end
+
+def write_secret_to_file secret, secret_file
+  begin
+    f = File.new secret_file, 'w'
+    f.puts secret
+    f.close
+  rescue Errno::EACCES
+    raise Puppet::ParserError,
+        "could not write to secret file '#{secret_file}'. "+
+        "check your permissions and make sure puppet has write/create access to the location. "+
+        "can't generate secret without a secret folder."
+  end
 end
 
 def get_secrets_dir node, mount_point

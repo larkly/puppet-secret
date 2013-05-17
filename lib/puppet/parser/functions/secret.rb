@@ -39,7 +39,16 @@ def ensure_secret callee, secretid, opts = {}
 end
 
 def create_secret secret_file, opts = {}
-  write_secret_to_file "hello world my dear node, from your favorite function!", secret_file
+  secret = generat_secret opts
+  write_secret_to_file secret, secret_file
+end
+
+def generat_secret opts = {}
+  require 'securerandom'
+  bytes = opts['bytes'] || 128
+  base64 = ( opts['base64'] || false ) == true
+
+  (base64) ? SecureRandom.base64(bytes) : SecureRandom.random_bytes(bytes)
 end
 
 def write_secret_to_file secret, secret_file

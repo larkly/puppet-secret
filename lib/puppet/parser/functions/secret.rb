@@ -1,19 +1,20 @@
 
 Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
-  secretid = vals[0] || "default"
+  secretid = vals[0] || 'default'
   opts = vals[1] || {}
+  opts['secrets_mount'] ||= 'secrets'
 
   # get the callee (secrets are saved based on fqdn)
   callee = lookupvar('fqdn')
 
   # validate all user input
-  validate callee, "FQDN"
-  validate secretid, "secret ID"
+  validate callee, 'FQDN'
+  validate secretid, 'secret ID'
 
   ensure_secret callee, secretid, opts
   
   # point the client to his secret
-  return "puppet:///secrets/secret"
+  return "puppet:///#{opts['secrets_mount']}/#{secretid}"
 end
 
 def validate sth, name

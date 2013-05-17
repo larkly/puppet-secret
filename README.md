@@ -66,6 +66,12 @@ more examples:
 Additional information
 ======================
 
+Limitations
+-----------
+
+Don't mistake this for a key-manager. It isn't. This is simply meant for all those task that quickly and easily need an unmanaged secret without extra components and complications.
+
+
 URI-mapping
 -----------
 

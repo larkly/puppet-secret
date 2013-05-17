@@ -35,9 +35,16 @@ def ensure_secret callee, secretid, opts = {}
   # do the secret defining action here...
   secrets_dir = get_secrets_dir callee, opts["secrets_mount"] || "secrets"
   secret_file = File::join secrets_dir, secretid
+  create_secret secret_file, opts if not File::exists? secret_file
 end
 
-def get_secrets_dir node, mount_point = "secrets"
+def create_secret secret_file, opts = {}
+  f = File.new secret_file, 'w'
+  f.puts "hello world my dear node, from you favorite function!"
+  f.close
+end
+
+def get_secrets_dir node, mount_point
   require 'puppet/util/inifile'
   require 'fileutils'
 

@@ -33,8 +33,8 @@ end
 
 def ensure_secret callee, secretid, opts = {}
   # do the secret defining action here...
-  secrets_dir = get_secrets_dir callee
-  #f = File::join( secrets_dir, callee, secretid )
+  secrets_dir = get_secrets_dir callee, opts["secrets_mount"] || "secrets"
+  secret_file = File::join secrets_dir, secretid
 end
 
 def get_secrets_dir node, mount_point = "secrets"

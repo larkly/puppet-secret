@@ -45,7 +45,12 @@ end
 
 def generate_secret opts = {}
   require 'securerandom'
-  bytes = opts['bytes'] || 128
+  # how bytes in the secret
+  bytes = opts['bytes'].to_i || 128
+  if bytes <= 0
+    raise Puppet::ParseError, "secrets cannot have a length of #{bytes} bytes (you provided '#{opts['bytes']}'). aborting."
+  end
+  # whether to base64 encode the secret
   base64 = ( opts['base64'] || false ) == true
 
   (base64) ? SecureRandom.base64(bytes) : SecureRandom.random_bytes(bytes)

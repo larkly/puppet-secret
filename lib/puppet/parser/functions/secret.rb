@@ -39,11 +39,11 @@ def ensure_secret callee, secretid, opts = {}
 end
 
 def create_secret secret_file, opts = {}
-  secret = generat_secret opts
+  secret = generate_secret opts
   write_secret_to_file secret, secret_file
 end
 
-def generat_secret opts = {}
+def generate_secret opts = {}
   require 'securerandom'
   bytes = opts['bytes'] || 128
   base64 = ( opts['base64'] || false ) == true

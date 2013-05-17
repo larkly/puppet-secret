@@ -32,4 +32,11 @@ end
 
 def ensure_secret callee, secretid, opts = {}
   # do the secret defining action here...
+  secrets_dir = get_secrets_dir
+  f = File::join( secrets_dir, callee, secretid )
+end
+
+def get_secrets_dir
+  fileserv_conf = File.join(Puppet[:confdir], 'fileserver.conf')
+  "/secrets"
 end

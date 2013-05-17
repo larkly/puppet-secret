@@ -105,7 +105,7 @@ If not, the server will create it with a new secret inside.
 License and Author
 ==================
 
-Author:: Dominik Richter <do.richter@telekom.de>
+Author:: Dominik Richter <do.richter@telekom.de>  
 Copyright:: 2013, Deutsche Telekom AG
 
 Licensed under the Apache License, Version 2.0 (the "License");

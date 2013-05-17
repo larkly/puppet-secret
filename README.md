@@ -32,7 +32,7 @@ Installation
 
         chown -R puppet:puppet /secrets
 
-2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the '%H' in the path as shown; this makes sure the node's FQDN is part of the access path)
+2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
 
         [secrets]
         path /secrets/%H/
@@ -57,7 +57,7 @@ more examples:
           'base64' => true
           })
 
-  which will get you something like:
+    which will get you something like:
 
         XgtLsQtcm6Tnxxpxzpo02C3geXKVo1uMMZXbohXWZWLQ3wqMrjEyTEGjImvU4/FIeXj01C+KM8R2oBu28qlLzzZX+4eaWny9n+76bRURbbZmOU7pNks5wB5lw3Y32kVlBiiiu0hMDYjqIuZ7kcwPSpO6a+Cxr/b5iToii13Ni29DXjYZq1SyPwfW3a2/qbIY4ziX3VLCRbWkzugecUVJ8mFXVniUG7Ssvu79XxXKfJJ9Vx9HbMYQJs7VAz0ZHND9FdqMknDEaIw=
 

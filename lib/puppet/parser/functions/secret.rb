@@ -65,8 +65,12 @@ module Secret
 
       # whether to base64 encode the secret
       base64 = ( opts['base64'] || false ) == true
+      y64 = ( opts['y64'] || false ) == true
 
-      (base64) ? SecureRandom.base64(bytes) : SecureRandom.random_bytes(bytes)
+      if base64 then SecureRandom.base64(bytes)
+      elsif y64 then SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
+      else           SecureRandom.random_bytes(bytes)
+      end
     end
 
     def write_secret_to_file secret, secret_file

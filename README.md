@@ -32,7 +32,7 @@ Installation
 
         chown -R puppet:puppet /secrets
 
-2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the '%H' in the path as shown; this makes sure the node's FQDN is part of the access path)
+2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
 
         [secrets]
         path /secrets/%H/
@@ -47,6 +47,8 @@ Options
 * `secrets_mount` := the mount path in fileserver, where secrets are stored (default: `secrets`)
 * `bytes` := the number of bytes to use for generating a new secret (default: `128`)
 * `base64` := if `true` will give you a base64 encoded secret instead of binary (default: `false`)
+* `y64` := if `true` will give you a base64 encoded secret which is url-safe (default: `false`)
+  (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
 
 more examples:
 
@@ -57,7 +59,7 @@ more examples:
           'base64' => true
           })
 
-  which will get you something like:
+    which will get you something like:
 
         XgtLsQtcm6Tnxxpxzpo02C3geXKVo1uMMZXbohXWZWLQ3wqMrjEyTEGjImvU4/FIeXj01C+KM8R2oBu28qlLzzZX+4eaWny9n+76bRURbbZmOU7pNks5wB5lw3Y32kVlBiiiu0hMDYjqIuZ7kcwPSpO6a+Cxr/b5iToii13Ni29DXjYZq1SyPwfW3a2/qbIY4ziX3VLCRbWkzugecUVJ8mFXVniUG7Ssvu79XxXKfJJ9Vx9HbMYQJs7VAz0ZHND9FdqMknDEaIw=
 

@@ -2,8 +2,9 @@ class secret-test {
   # generate the secret key
   $binsecret = secret('mykey-bin')
   $base64secret = secret('mykey-b64', {'method' => 'base64' })
-  $y64secret = secret('mykey-y64', {'method' => 'y64', 'bytes' => 500 })
-  $abcsecret = secret('mykey-abc', {'method' => 'alphabet' })
+  $y64secret = secret('mykey-y64', {'method' => 'y64' })
+  $abcsecret16 = secret('mykey-abc', {'method' => 'alphabet', 'length' => 16 })
+  $abcsecret11 = secret('mykey-abc', {'method' => 'alphabet', 'bytes' => 11 })
 
   file {'secretfile-bin':
     path    => '/tmp/secretfile-bin',
@@ -26,10 +27,17 @@ class secret-test {
     source  => [$y64secret],
   }
 
-  file {'secretfile-abc':
-    path    => '/tmp/secretfile-abc',
+  file {'secretfile-abc16':
+    path    => '/tmp/secretfile-abc16',
     ensure  => present,
     mode    => 0666,
-    source  => [$abcsecret],
+    source  => [$abcsecret16],
+  }
+
+  file {'secretfile-abc11':
+    path    => '/tmp/secretfile-abc11',
+    ensure  => present,
+    mode    => 0666,
+    source  => [$abcsecret11],
   }
 }

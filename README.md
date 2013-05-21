@@ -46,6 +46,8 @@ Options
 
 * `secrets_mount` := the mount path in fileserver, where secrets are stored (default: `secrets`)
 * `bytes` := the number of bytes to use for generating a new secret (default: `128`)
+* `length` := alternative to `bytes`: specifies how long the generated secret should be (number of fields).  
+  for `base64`, `y64` and `alphabet` it is the number of characters in the output (without padding).
 * `method` := can be either:
   * `default` := create a binary secret, ie select randomly from all available bits
   * `base64` := base64 encoded secret, eg `unM/BV7h7P6Nog==`
@@ -55,7 +57,7 @@ Options
 
 more examples:
 
-* for ascii secret in 200 bytes
+* for base64-encoded secret in 200 bytes
 
         $secret_path = secret('myid', {
           'bytes' => 200,
@@ -66,6 +68,16 @@ more examples:
 
         XgtLsQtcm6Tnxxpxzpo02C3geXKVo1uMMZXbohXWZWLQ3wqMrjEyTEGjImvU4/FIeXj01C+KM8R2oBu28qlLzzZX+4eaWny9n+76bRURbbZmOU7pNks5wB5lw3Y32kVlBiiiu0hMDYjqIuZ7kcwPSpO6a+Cxr/b5iToii13Ni29DXjYZq1SyPwfW3a2/qbIY4ziX3VLCRbWkzugecUVJ8mFXVniUG7Ssvu79XxXKfJJ9Vx9HbMYQJs7VAz0ZHND9FdqMknDEaIw=
 
+* for alphabet-based secret in 16 characters
+
+        $secret_path = secret('myid', {
+          'length' => 16,
+          'method' => 'alphabet'
+          })
+
+    which will get you something like:
+
+        bnslTjPYSTHvakcQ
 
 
 Additional information

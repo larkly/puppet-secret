@@ -3,6 +3,7 @@ class secret-test {
   $binsecret = secret('mykey-bin')
   $base64secret = secret('mykey-b64', {'base64' => true })
   $y64secret = secret('mykey-y64', {'y64' => true, 'bytes' => 500 })
+  $abcsecret = secret('mykey-abc', {'alphabet' => true })
 
   file {'secretfile-bin':
     path    => '/tmp/secretfile-bin',
@@ -23,5 +24,12 @@ class secret-test {
     ensure  => present,
     mode    => 0666,
     source  => [$y64secret],
+  }
+
+  file {'secretfile-abc':
+    path    => '/tmp/secretfile-abc',
+    ensure  => present,
+    mode    => 0666,
+    source  => [$abcsecret],
   }
 }

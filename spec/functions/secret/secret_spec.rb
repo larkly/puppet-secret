@@ -19,16 +19,18 @@ describe 'secret' do
 
     # make sure to bootstrap whatever environment we need
     before :each do
-      scope.expects(:lookupvar).with("fqdn").returns("spec.ops").at_least_once
+      @fqdn = 'spec.ops'
+      @base_dir = "/tmp/secrets"
+      FileUtils::rm_rf @base_dir
 
-      base_dir = "/tmp/secrets"
-      FileUtils::rm_rf base_dir
+      # specify the fqdn
+      scope.expects(:lookupvar).with("fqdn").returns(@fqdn).at_least_once
 
       # mockup our configuration
       # mount to puppet:///secrets  ==>  /tmp/secrets/%H
       conf = Puppet::FileServing::Configuration.configuration
       mount = Puppet::FileServing::Mount::File.new "secrets"
-      mount.path = "#{base_dir}/%H"
+      mount.path = "#{@base_dir}/%H"
       conf.stubs(:mounts).returns("secrets" => mount)
     end
 

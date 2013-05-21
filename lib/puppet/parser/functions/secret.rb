@@ -18,7 +18,9 @@ module Secret
     # global definitions, adjust to your liking
     MAX_SECRET_BYTES = 10*1024
     MIN_SECRET_BYTES = 1
-
+    IDENTIFIER_ALPHABET =
+      "abcdefghijklmnopqrstuvwxyz"+
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     def ensure_secret callee, secretid, opts = {}
       # validate all user input
@@ -56,6 +58,9 @@ module Secret
 
       res = ''
       n = alphabet.length
+
+      # in order to get our estimate close to the number of bytes requested,
+      # we have to adjust the number of bits we gain via log_2 (alphabet_length)
       cur_len = bytes
       reduction = Math::log2(n)/8
 
@@ -81,9 +86,11 @@ module Secret
       # whether to base64 encode the secret
       base64 = ( opts['base64'] || false ) == true
       y64 = ( opts['y64'] || false ) == true
+      abc = ( opts['alphabet'] || false ) == true
 
       if base64 then SecureRandom.base64(bytes)
       elsif y64 then SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
+      elsif abc then alphabet_based_secret bytes, IDENTIFIER_ALPHABET
       else           SecureRandom.random_bytes(bytes)
       end
     end

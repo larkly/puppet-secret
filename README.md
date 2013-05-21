@@ -46,6 +46,8 @@ Options
 
 * `secrets_mount` := the mount path in fileserver, where secrets are stored (default: `secrets`)
 * `bytes` := the number of bytes to use for generating a new secret (default: `128`)
+* `length` := alternative to `bytes`: specifies how long the generated secret should be (number of fields).  
+  for `base64`, `y64` and `alphabet` it is the number of characters in the output (without padding).
 * `method` := can be either:
   * `default` := create a binary secret, ie select randomly from all available bits
   * `base64` := base64 encoded secret, eg `unM/BV7h7P6Nog==`

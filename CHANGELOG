@@ -1,2 +1,4 @@
+0.3: select secret-generator via 'method' = 'default/base64/y64/alphabet'
+     added alphabet-based ([a-zA-Z]) secrets
 0.2: added url-safe base64 encoded secrets
 0.1: initial release

@@ -32,6 +32,33 @@ module Secret
       create_secret secret_file, opts if not File::exists? secret_file
     end
 
+    def generate_secret opts = {}
+      require 'securerandom'
+
+      # how bytes in the secret
+      bytes = ( opts['bytes'] || 128 ).to_i
+      if bytes < MIN_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      end
+      if bytes > MAX_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      end
+
+      case opts['method'].to_s
+      when 'base64'
+        SecureRandom.base64(bytes)
+      when 'y64'
+        SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
+      when 'alphabet'
+        alphabet_based_secret bytes, IDENTIFIER_ALPHABET
+      when 'default', ''
+        SecureRandom.random_bytes(bytes)
+      else
+        raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
+      end
+    end
+
+
     private
 
     def validate sth, name
@@ -69,32 +96,6 @@ module Secret
       end
 
       res
-    end
-
-    def generate_secret opts = {}
-      require 'securerandom'
-
-      # how bytes in the secret
-      bytes = ( opts['bytes'] || 128 ).to_i
-      if bytes < MIN_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      end
-      if bytes > MAX_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      end
-
-      case opts['method'].to_s
-      when 'base64'
-        SecureRandom.base64(bytes)
-      when 'y64'
-        SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
-      when 'alphabet'
-        alphabet_based_secret bytes, IDENTIFIER_ALPHABET
-      when 'default', ''
-        SecureRandom.random_bytes(bytes)
-      else
-        raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
-      end
     end
 
     def write_secret_to_file secret, secret_file

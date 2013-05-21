@@ -36,6 +36,11 @@ describe 'secret' do
       scope.function_secret([]).should eq('puppet:///secrets/default')
     end
 
+    it 'should define a secret with its first parameter' do
+      scope.function_secret(["mysecret"]).should eq('puppet:///secrets/mysecret')
+      scope.function_secret(["myother"]).should eq('puppet:///secrets/myother')
+    end
+
   end
 
 end

@@ -102,20 +102,20 @@ module Secret
 
     def map_length_to_bytes length, method
       case method
-      when 'base64'     : length_to_bytes_for_cardinality length, 64
-      when 'y64'        : length_to_bytes_for_cardinality length, 64
-      when 'alphabet'   : length_to_bytes_for_cardinality length, IDENTIFIER_ALPHABET.length
-      when 'default','' : length
+      when 'base64'     ; length_to_bytes_for_cardinality length, 64
+      when 'y64'        ; length_to_bytes_for_cardinality length, 64
+      when 'alphabet'   ; length_to_bytes_for_cardinality length, IDENTIFIER_ALPHABET.length
+      when 'default','' ; length
       else                raise Puppet::ParseError, "don't understand method '#{method}' for secret generation. aborting."
       end
     end
 
     def generate_secret_for_method method, bytes, opts = {}
       case method
-      when 'base64'     : SecureRandom.base64 bytes
-      when 'y64'        : y64_secret bytes
-      when 'alphabet'   : alphabet_secret bytes, IDENTIFIER_ALPHABET
-      when 'default','' : SecureRandom.random_bytes bytes
+      when 'base64'     ; SecureRandom.base64 bytes
+      when 'y64'        ; y64_secret bytes
+      when 'alphabet'   ; alphabet_secret bytes, IDENTIFIER_ALPHABET
+      when 'default','' ; SecureRandom.random_bytes bytes
       else                raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
       end
     end

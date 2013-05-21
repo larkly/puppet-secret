@@ -90,7 +90,7 @@ module Secret
         SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
       when 'alphabet'
         alphabet_based_secret bytes, IDENTIFIER_ALPHABET
-      when 'binary', ''
+      when 'default', ''
         SecureRandom.random_bytes(bytes)
       else
         raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."

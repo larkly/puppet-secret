@@ -68,7 +68,7 @@ module Secret
       y64 = ( opts['y64'] || false ) == true
 
       if base64 then SecureRandom.base64(bytes)
-      elsif y64 then SecureRandom.urlsafe_base64(bytes)
+      elsif y64 then SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
       else           SecureRandom.random_bytes(bytes)
       end
     end

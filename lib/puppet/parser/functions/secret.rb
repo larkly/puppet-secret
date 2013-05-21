@@ -65,7 +65,7 @@ module Secret
       reduction = (Math::log(n)/Math::log(2))/8
 
       while cur_len > 0
-        res += alphabet[ SecureRandom.random_number(n) ]
+        res += alphabet[ SecureRandom.random_number(n), 1 ]
         cur_len -= reduction
       end
       res

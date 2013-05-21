@@ -4,6 +4,10 @@
 Vagrant::Config.run do |config|
   config.vm.box = "precise64"
 
+  # don't need guest box additions for tests
+  config.vbguest.no_install = true
+  config.vbguest.no_remote = true
+
   config.vm.define :puppetmaster do |cfg|
     cfg.vm.host_name = "puppet-master.local"
     cfg.vm.network :hostonly, "192.168.2.10"

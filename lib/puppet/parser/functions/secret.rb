@@ -32,6 +32,29 @@ module Secret
       create_secret secret_file, opts if not File::exists? secret_file
     end
 
+    def generate_secret opts = {}
+      require 'securerandom'
+
+      # how bytes in the secret
+      method = opts['method'].to_s
+      len = opts['length'].to_i
+      if len > 0
+        bytes = map_length_to_bytes len, method
+      else
+        bytes = ( opts['bytes'] || 128 ).to_i
+      end
+
+      # make sure we don't have too few or too many bytes
+      if    bytes < MIN_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      elsif bytes > MAX_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      end
+
+      generate_secret_for_method method, bytes, opts
+    end
+
+
     private
 
     def validate sth, name
@@ -97,27 +120,6 @@ module Secret
       end
     end
 
-    def generate_secret opts = {}
-      require 'securerandom'
-
-      # how bytes in the secret
-      method = opts['method'].to_s
-      len = opts['length'].to_i
-      if len > 0
-        bytes = map_length_to_bytes len, method
-      else
-        bytes = ( opts['bytes'] || 128 ).to_i
-      end
-
-      # make sure we don't have too few or too many bytes
-      if    bytes < MIN_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      elsif bytes > MAX_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      end
-
-      generate_secret_for_method method, bytes, opts
-    end
 
     def write_secret_to_file secret, secret_file
       begin

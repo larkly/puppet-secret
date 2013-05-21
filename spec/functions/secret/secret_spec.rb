@@ -41,6 +41,8 @@ describe 'secret' do
     it 'should define a secret with its first parameter' do
       scope.function_secret(["mysecret"]).should eq('puppet:///secrets/mysecret')
       scope.function_secret(["myother"]).should eq('puppet:///secrets/myother')
+      File::exists?(File::join( @base_dir, @fqdn, 'mysecret')).should == true
+      File::exists?(File::join( @base_dir, @fqdn, 'myother')).should == true
     end
 
   end

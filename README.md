@@ -68,6 +68,16 @@ more examples:
 
         XgtLsQtcm6Tnxxpxzpo02C3geXKVo1uMMZXbohXWZWLQ3wqMrjEyTEGjImvU4/FIeXj01C+KM8R2oBu28qlLzzZX+4eaWny9n+76bRURbbZmOU7pNks5wB5lw3Y32kVlBiiiu0hMDYjqIuZ7kcwPSpO6a+Cxr/b5iToii13Ni29DXjYZq1SyPwfW3a2/qbIY4ziX3VLCRbWkzugecUVJ8mFXVniUG7Ssvu79XxXKfJJ9Vx9HbMYQJs7VAz0ZHND9FdqMknDEaIw=
 
+* for alphabet-based secret in 16 characters
+
+        $secret_path = secret('myid', {
+          'length' => 16,
+          'method' => 'alphabet'
+          })
+
+    which will get you something like:
+
+        bnslTjPYSTHvakcQ
 
 
 Additional information

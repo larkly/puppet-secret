@@ -46,10 +46,12 @@ Options
 
 * `secrets_mount` := the mount path in fileserver, where secrets are stored (default: `secrets`)
 * `bytes` := the number of bytes to use for generating a new secret (default: `128`)
-* `base64` := if `true` will give you a base64 encoded secret instead of binary (default: `false`)
-* `y64` := if `true` will give you a base64 encoded secret which is url-safe (default: `false`)
-  (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
-* `alphabet` := if `true` will give you a secret form the `[a-zA-Z]` letterspace (default: `false`)
+* `method` := can be either:
+  * `default` := create a binary secret, ie select randomly from all available bits
+  * `base64` := base64 encoded secret, eg `unM/BV7h7P6Nog==`
+  * `y64` := base64 encoded secret which is url-safe, eg `-biHariH.ovzvw`
+    (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
+  * `alphabet` := generate secret form the `[a-zA-Z]` letterspace, eg `enbpaAyuFfYSHKx`
 
 more examples:
 
@@ -57,7 +59,7 @@ more examples:
 
         $secret_path = secret('myid', {
           'bytes' => 200,
-          'base64' => true
+          'method' => 'base64'
           })
 
     which will get you something like:

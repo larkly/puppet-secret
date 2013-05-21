@@ -1,4 +1,4 @@
-     select secret length via either 'bytes' or 'length'
+0.4: select secret length via either 'bytes' or 'length'
      added rspec tests for secret
 0.3: select secret-generator via 'method' = 'default/base64/y64/alphabet'
      added alphabet-based ([a-zA-Z]) secrets

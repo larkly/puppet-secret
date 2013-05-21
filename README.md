@@ -49,6 +49,7 @@ Options
 * `base64` := if `true` will give you a base64 encoded secret instead of binary (default: `false`)
 * `y64` := if `true` will give you a base64 encoded secret which is url-safe (default: `false`)
   (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
+* `alphabet` := if `true` will give you a secret form the `[a-zA-Z]` letterspace (default: `false`)
 
 more examples:
 

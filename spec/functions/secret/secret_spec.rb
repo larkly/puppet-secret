@@ -19,7 +19,7 @@ describe 'secret' do
 
     # make sure to bootstrap whatever environment we need
     before :each do
-      scope.expects(:lookupvar).with("fqdn").returns("spec.ops")
+      scope.expects(:lookupvar).with("fqdn").returns("spec.ops").at_least_once
 
       base_dir = "/tmp/secrets"
       FileUtils::rm_rf base_dir

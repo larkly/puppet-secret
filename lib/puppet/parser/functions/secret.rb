@@ -32,6 +32,29 @@ module Secret
       create_secret secret_file, opts if not File::exists? secret_file
     end
 
+    def generate_secret opts = {}
+      require 'securerandom'
+
+      # how bytes in the secret
+      method = opts['method'].to_s
+      len = opts['length'].to_i
+      if len > 0
+        bytes = map_length_to_bytes len, method
+      else
+        bytes = ( opts['bytes'] || 128 ).to_i
+      end
+
+      # make sure we don't have too few or too many bytes
+      if    bytes < MIN_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      elsif bytes > MAX_SECRET_BYTES
+        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
+      end
+
+      generate_secret_for_method method, bytes, opts
+    end
+
+
     private
 
     def validate sth, name
@@ -53,49 +76,50 @@ module Secret
       write_secret_to_file secret, secret_file
     end
 
-    def alphabet_based_secret bytes, alphabet
+    def alphabet_secret bytes, alphabet
       raise Puppet::ParseError, "trying to encode with an empty alphabet. this is impossible." if alphabet.empty?
 
       res = ''
       n = alphabet.length
-
-      # in order to get our estimate close to the number of bytes requested,
-      # we have to adjust the number of bits we gain via log_2 (alphabet_length)
-      cur_len = bytes
-      reduction = (Math::log(n)/Math::log(2))/8
-
-      while cur_len > 0
+      length = bytes_to_length_for_cardinality bytes, n
+      for i in (0..(length-1))
         res += alphabet[ SecureRandom.random_number(n), 1 ]
-        cur_len -= reduction
       end
       res
     end
 
-    def generate_secret opts = {}
-      require 'securerandom'
+    def y64_secret bytes
+      SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
+    end
 
-      # how bytes in the secret
-      bytes = ( opts['bytes'] || 128 ).to_i
-      if bytes < MIN_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of less than #{MIN_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      end
-      if bytes > MAX_SECRET_BYTES
-        raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
-      end
+    def length_to_bytes_for_cardinality length, cardinality
+      ( length * (Math::log(cardinality)/Math::log(2)) / 8 ).floor
+    end
 
-      case opts['method'].to_s
-      when 'base64'
-        SecureRandom.base64(bytes)
-      when 'y64'
-        SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
-      when 'alphabet'
-        alphabet_based_secret bytes, IDENTIFIER_ALPHABET
-      when 'default', ''
-        SecureRandom.random_bytes(bytes)
-      else
-        raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
+    def bytes_to_length_for_cardinality bytes, cardinality
+      ( bytes * 8 / (Math::log(cardinality)/Math::log(2)) ).ceil
+    end
+
+    def map_length_to_bytes length, method
+      case method
+      when 'base64'     ; length_to_bytes_for_cardinality length, 64
+      when 'y64'        ; length_to_bytes_for_cardinality length, 64
+      when 'alphabet'   ; length_to_bytes_for_cardinality length, IDENTIFIER_ALPHABET.length
+      when 'default','' ; length
+      else                raise Puppet::ParseError, "don't understand method '#{method}' for secret generation. aborting."
       end
     end
+
+    def generate_secret_for_method method, bytes, opts = {}
+      case method
+      when 'base64'     ; SecureRandom.base64 bytes
+      when 'y64'        ; y64_secret bytes
+      when 'alphabet'   ; alphabet_secret bytes, IDENTIFIER_ALPHABET
+      when 'default','' ; SecureRandom.random_bytes bytes
+      else                raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
+      end
+    end
+
 
     def write_secret_to_file secret, secret_file
       begin

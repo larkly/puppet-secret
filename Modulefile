@@ -1,2 +1,2 @@
 name    'mksecret'
-version 'nightly'
+version '0.2'

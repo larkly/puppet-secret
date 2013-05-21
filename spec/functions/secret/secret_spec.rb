@@ -45,6 +45,16 @@ describe 'secret' do
       File::exists?(File::join( @base_dir, @fqdn, 'myother')).should == true
     end
 
+    it 'should reuse the secret once it was created' do
+      scope.function_secret(["one"]).should eq('puppet:///secrets/one')
+      f1 = File::read File::join( @base_dir, @fqdn, 'one')
+
+      scope.function_secret(["one"]).should eq('puppet:///secrets/one')
+      f2 = File::read File::join( @base_dir, @fqdn, 'one')
+
+      f1.should eq(f2)
+    end
+
   end
 
 end

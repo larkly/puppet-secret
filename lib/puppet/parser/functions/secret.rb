@@ -61,13 +61,13 @@ module Secret
 
       # in order to get our estimate close to the number of bytes requested,
       # we have to adjust the number of bits we gain via log_2 (alphabet_length)
-      cur_len = bytes
-      reduction = (Math::log(n)/Math::log(2))/8
-
-      while cur_len > 0
+      cur_len = 0
+      step = (Math::log(n)/Math::log(2))/8
+      while cur_len < bytes
         res += alphabet[ SecureRandom.random_number(n), 1 ]
-        cur_len -= reduction
+        cur_len += step
       end
+
       res
     end
 

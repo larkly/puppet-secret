@@ -2,7 +2,7 @@ class secret-test {
   # generate the secret key
   $binsecret = secret('mykey-bin')
   $base64secret = secret('mykey-b64', {'method' => 'base64' })
-  $y64secret = secret('mykey-y64', {'method' => 'y64', 'bytes' => 500 })
+  $y64secret = secret('mykey-y64', {'method' => 'y64' })
   $abcsecret16 = secret('mykey-abc', {'method' => 'alphabet', 'length' => 16 })
   $abcsecret11 = secret('mykey-abc', {'method' => 'alphabet', 'bytes' => 11 })
 

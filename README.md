@@ -55,7 +55,7 @@ Options
 
 more examples:
 
-* for ascii secret in 200 bytes
+* for base64-encoded secret in 200 bytes
 
         $secret_path = secret('myid', {
           'bytes' => 200,

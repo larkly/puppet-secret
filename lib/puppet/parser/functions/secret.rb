@@ -51,6 +51,21 @@ module Secret
       write_secret_to_file secret, secret_file
     end
 
+    def alphabet_based_secret bytes, alphabet
+      raise Puppet::ParseError, "trying to encode with an empty alphabet. this is impossible." if alphabet.empty?
+
+      res = ''
+      n = alphabet.length
+      cur_len = bytes
+      reduction = Math::log2(n)/8
+
+      while cur_len > 0
+        res += alphabet[ SecureRandom.random_number(n) ]
+        cur_len -= reduction
+      end
+      res
+    end
+
     def generate_secret opts = {}
       require 'securerandom'
 

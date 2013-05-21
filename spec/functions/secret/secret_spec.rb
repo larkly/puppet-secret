@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'rspec-puppet'
 require 'puppet/file_serving/configuration'
+require 'fileutils'
 
 describe 'secret' do
   include RSpec::Puppet::Support
@@ -20,11 +21,14 @@ describe 'secret' do
     before :each do
       scope.expects(:lookupvar).with("fqdn").returns("spec.ops")
 
+      base_dir = "/tmp/secrets"
+      FileUtils::rm_rf base_dir
+
       # mockup our configuration
       # mount to puppet:///secrets  ==>  /tmp/secrets/%H
       conf = Puppet::FileServing::Configuration.configuration
       mount = Puppet::FileServing::Mount::File.new "secrets"
-      mount.path = "/tmp/secrets/%H"
+      mount.path = "#{base_dir}/%H"
       conf.stubs(:mounts).returns("secrets" => mount)
     end
 

@@ -83,15 +83,17 @@ module Secret
         raise Puppet::ParseError, "secrets cannot have a length of more than #{MAX_SECRET_BYTES} bytes (you provided '#{opts['bytes']}'). aborting."
       end
 
-      # whether to base64 encode the secret
-      base64 = ( opts['base64'] || false ) == true
-      y64 = ( opts['y64'] || false ) == true
-      abc = ( opts['alphabet'] || false ) == true
-
-      if base64 then SecureRandom.base64(bytes)
-      elsif y64 then SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
-      elsif abc then alphabet_based_secret bytes, IDENTIFIER_ALPHABET
-      else           SecureRandom.random_bytes(bytes)
+      case opts['method'].to_s
+      when 'base64'
+        SecureRandom.base64(bytes)
+      when 'y64'
+        SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
+      when 'alphabet'
+        alphabet_based_secret bytes, IDENTIFIER_ALPHABET
+      when 'default', ''
+        SecureRandom.random_bytes(bytes)
+      else
+        raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
       end
     end
 

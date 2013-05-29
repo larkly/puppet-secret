@@ -10,3 +10,5 @@ require "rake/testtask"
 Rake::TestTask.new do |t|
   t.pattern = "spec/classes/*_spec.rb"
 end
+
+task default: [:clean, :spec]

@@ -1,5 +1,6 @@
 secret
 ======
+[![Build Status](https://travis-ci.org/TelekomCloud/puppet-secret.png)](https://travis-ci.org/TelekomCloud/puppet-secret)
 
 Puppet function to create and manage secrets for nodes on puppet master.
 

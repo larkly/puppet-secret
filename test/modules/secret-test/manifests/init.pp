@@ -5,6 +5,7 @@ class secret-test {
   $y64secret = secret('mykey-y64', {'method' => 'y64' })
   $abcsecret16 = secret('mykey-abc16', {'method' => 'alphabet', 'length' => 16 })
   $abcsecret11 = secret('mykey-abc11', {'method' => 'alphabet', 'bytes' => 11 })
+  $cephsecret = secret('common-ceph', {'method' => 'ceph'})
 
   file {'secretfile-bin':
     path    => '/tmp/secretfile-bin',
@@ -39,5 +40,12 @@ class secret-test {
     ensure  => present,
     mode    => 0666,
     source  => [$abcsecret11],
+  }
+
+  file {'secretfile-ceph':
+    path    => '/tmp/secretfile-ceph',
+    ensure  => present,
+    mode    => 0666,
+    source  => [$cephsecret],
   }
 }

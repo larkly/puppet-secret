@@ -114,8 +114,8 @@ module Secret
       when 'base64'     ; length_to_bytes_for_cardinality length, 64
       when 'y64'        ; length_to_bytes_for_cardinality length, 64
       when 'alphabet'   ; length_to_bytes_for_cardinality length, IDENTIFIER_ALPHABET.length
-      when 'default','' ; length
-      else                raise Puppet::ParseError, "don't understand method '#{method}' for secret generation. aborting."
+      # the default has bytes == length; all methods that don't care about length can be safely ignored
+      else              ; length
       end
     end
 

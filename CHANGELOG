@@ -1,4 +1,4 @@
-     added examples for shared secret
+0.7: added examples for shared secret
 0.6: added ceph secret provider
 0.5: integrated into travis-ci
 0.4: select secret length via either 'bytes' or 'length'

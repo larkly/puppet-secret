@@ -64,11 +64,11 @@ module Secret
       end
 
       if (sth =~ /^[^\/]*$/).nil?
-        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains '/' (#{sth}). this is not allowed."
+        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains '/' (you provided '#{sth}'). this is not allowed."
       end
 
-      if not (sth =~ /^[.]*$/).nil?
-        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains only dots ('.') (#{sth}). this is not allowed."
+      if not (sth =~ /^[.]+$/).nil?
+        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains only dots ('.') (you provided '#{sth}'). this is not allowed."
       end
     end
 

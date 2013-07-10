@@ -5,7 +5,8 @@ Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
   opts['secrets_mount'] ||= 'secrets'
 
   # get the callee (secrets are saved based on fqdn)
-  callee = lookupvar('fqdn')
+  callee = lookupvar('::fqdn')
+  raise Puppet::ParseError, "Can't find the FQDN of the client that is using secret(). aborting." if callee == :undefined
 
   Secret::ensure_secret callee, secretid, opts
   

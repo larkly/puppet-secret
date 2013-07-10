@@ -128,6 +128,15 @@ Through the generator, the server will make sure the requested file actually exi
 If not, the server will create it with a new secret inside.
 
 
+Shared secret
+-------------
+
+This is easily possible by removing node-based ACL from puppet:
+
+    [shared-secrets]
+    path /secrets/shared/
+    allow *.mydomain
+
 
 License and Author
 ==================

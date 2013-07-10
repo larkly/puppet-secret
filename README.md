@@ -6,7 +6,7 @@ Puppet function to create and manage secrets for nodes on puppet master.
 
     $secret_path = secret('my_id')
 
-You now have a pointer to your secret, eg: `puppet:///secrets/cryptsetup_key`
+You now have a pointer to your secret, e.g. `puppet:///secrets/cryptsetup_key`
 
 You can use it via:
 
@@ -14,7 +14,7 @@ You can use it via:
       path    => '/my/secretfile',
       ensure  => present,
       mode    => 0600,
-      source  => [$secret_path],
+      source  => $secret_path,
     }
 
 Secrets that don't exist will be generated for you.
@@ -58,11 +58,11 @@ Options
 * `length` := alternative to `bytes`: specifies how long the generated secret should be (number of fields).  
   for `base64`, `y64` and `alphabet` it is the number of characters in the output (without padding).
 * `method` := can be either:
-  * `default` := create a binary secret, ie select randomly from all available bits
-  * `base64` := base64 encoded secret, eg `unM/BV7h7P6Nog==`
-  * `y64` := base64 encoded secret which is url-safe, eg `-biHariH.ovzvw`
+  * `default` := create a binary secret, i.e. select randomly from all available bits
+  * `base64` := base64 encoded secret, e.g. `unM/BV7h7P6Nog==`
+  * `y64` := base64 encoded secret which is url-safe, e.g. `-biHariH.ovzvw`
     (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
-  * `alphabet` := generate secret form the `[a-zA-Z]` letterspace, eg `enbpaAyuFfYSHKx`
+  * `alphabet` := generate secret from the `[a-zA-Z]` letterspace, e.g. `enbpaAyuFfYSHKx`
   * `ceph` := generate secret for ceph via `ceph-authtool`. For this, the tool must exist on the server. On ubuntu you get it by installing `ceph-common`.
 
 more examples:
@@ -112,7 +112,7 @@ With a server configuration like this:
 
 you will create a `puppet:///secrets/` URI.
 
-If a client called `puppy.com` accesses a secret, eg:
+If a client called `puppy.com` accesses a secret, e.g.:
 
     $secret_path = secret('myid')
 
@@ -127,6 +127,15 @@ and on the server's filesystem will be turned into reading
 Through the generator, the server will make sure the requested file actually exists.
 If not, the server will create it with a new secret inside.
 
+
+Shared secret
+-------------
+
+This is easily possible by removing node-based ACL from puppet:
+
+    [shared-secrets]
+    path /secrets/shared/
+    allow *.mydomain
 
 
 License and Author

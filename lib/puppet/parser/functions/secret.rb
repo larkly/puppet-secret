@@ -5,7 +5,8 @@ Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
   opts['secrets_mount'] ||= 'secrets'
 
   # get the callee (secrets are saved based on fqdn)
-  callee = lookupvar('fqdn')
+  callee = lookupvar('::fqdn')
+  raise Puppet::ParseError, "Can't find the FQDN of the client that is using secret(). aborting." if callee == :undefined
 
   Secret::ensure_secret callee, secretid, opts
   
@@ -63,11 +64,11 @@ module Secret
       end
 
       if (sth =~ /^[^\/]*$/).nil?
-        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains '/' (#{sth}). this is not allowed."
+        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains '/' (you provided '#{sth}'). this is not allowed."
       end
 
-      if not (sth =~ /^[.]*$/).nil?
-        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains only dots ('.') (#{sth}). this is not allowed."
+      if not (sth =~ /^[.]+$/).nil?
+        raise Puppet::ParseError, "#{name} for callee of function 'secret()' contains only dots ('.') (you provided '#{sth}'). this is not allowed."
       end
     end
 
@@ -92,6 +93,14 @@ module Secret
       SecureRandom.base64(bytes).gsub('+','.').gsub('/','_').gsub('=','-')
     end
 
+    def ceph_secret
+      if which("ceph-authtool").nil?
+        raise Puppet::ParseError, "you must install ceph and have ceph-authtool executable in order to generate ceph secrets. aborting."
+      else
+        `ceph-authtool --gen-print-key`
+      end
+    end
+
     def length_to_bytes_for_cardinality length, cardinality
       ( length * (Math::log(cardinality)/Math::log(2)) / 8 ).floor
     end
@@ -105,8 +114,8 @@ module Secret
       when 'base64'     ; length_to_bytes_for_cardinality length, 64
       when 'y64'        ; length_to_bytes_for_cardinality length, 64
       when 'alphabet'   ; length_to_bytes_for_cardinality length, IDENTIFIER_ALPHABET.length
-      when 'default','' ; length
-      else                raise Puppet::ParseError, "don't understand method '#{method}' for secret generation. aborting."
+      # the default has bytes == length; all methods that don't care about length can be safely ignored
+      else              ; length
       end
     end
 
@@ -116,6 +125,7 @@ module Secret
       when 'y64'        ; y64_secret bytes
       when 'alphabet'   ; alphabet_secret bytes, IDENTIFIER_ALPHABET
       when 'default','' ; SecureRandom.random_bytes bytes
+      when 'ceph'       ; ceph_secret
       else                raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
       end
     end
@@ -172,6 +182,19 @@ module Secret
       end
 
       dir
+    end
+
+    # determine if a command exists:
+    # http://stackoverflow.com/questions/2108727/which-in-ruby-checking-if-program-exists-in-path-from-ruby
+    def which cmd
+      exts = ENV['PATHEXT'] ? ENV['PATHEXT'].split(';') : ['']
+      ENV['PATH'].split(File::PATH_SEPARATOR).each do |path|
+        exts.each { |ext|
+          exe = File.join(path, "#{cmd}#{ext}")
+          return exe if File.executable? exe
+        }
+      end
+      return nil
     end
 
   end

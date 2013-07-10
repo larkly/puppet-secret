@@ -25,7 +25,15 @@ If you follow the installation correctly, you have an easy ACL-secured per-node 
 Installation
 ------------
 
-1. Create a folder on puppet master where you want to store your secrets. Ideally, this should be outside of puppet configuration (and securely replicated ;) ).
+1. Clone from git:
+
+        git clone <source> puppet-secret
+
+2. Install to puppet
+
+        mv puppet-secret /etc/puppet/modules/secret
+
+3. Create a folder on puppet master where you want to store your secrets. Ideally, this should be outside of puppet configuration (and securely replicated ;) ).
 
         mkdir -p /secrets
 
@@ -33,13 +41,13 @@ Installation
 
         chown -R puppet:puppet /secrets
 
-2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
+4. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
 
         [secrets]
         path /secrets/%H/
         allow *.mydomain
 
-3. Use it. See examples.
+5. Use it. See examples.
 
 
 Options
@@ -55,6 +63,7 @@ Options
   * `y64` := base64 encoded secret which is url-safe, eg `-biHariH.ovzvw`
     (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
   * `alphabet` := generate secret form the `[a-zA-Z]` letterspace, eg `enbpaAyuFfYSHKx`
+  * `ceph` := generate secret for ceph via `ceph-authtool`. For this, the tool must exist on the server. On ubuntu you get it by installing `ceph-common`.
 
 more examples:
 

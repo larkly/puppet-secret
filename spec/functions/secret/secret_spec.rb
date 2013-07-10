@@ -24,7 +24,7 @@ describe 'secret' do
       FileUtils::rm_rf @base_dir
 
       # specify the fqdn
-      scope.expects(:lookupvar).with("fqdn").returns(@fqdn).at_least_once
+      scope.expects(:lookupvar).with("::fqdn").returns(@fqdn).at_least_once
 
       # mockup our configuration
       # mount to puppet:///secrets  ==>  /tmp/secrets/%H

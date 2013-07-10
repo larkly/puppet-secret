@@ -11,41 +11,41 @@ class secret-test {
     path    => '/tmp/secretfile-bin',
     ensure  => present,
     mode    => 0666,
-    source  => [$binsecret],
+    source  => $binsecret,
   }
 
   file {'secretfile-b64':
     path    => '/tmp/secretfile-b64',
     ensure  => present,
     mode    => 0666,
-    source  => [$base64secret],
+    source  => $base64secret,
   }
 
   file {'secretfile-y64':
     path    => '/tmp/secretfile-y64',
     ensure  => present,
     mode    => 0666,
-    source  => [$y64secret],
+    source  => $y64secret,
   }
 
   file {'secretfile-abc16':
     path    => '/tmp/secretfile-abc16',
     ensure  => present,
     mode    => 0666,
-    source  => [$abcsecret16],
+    source  => $abcsecret16,
   }
 
   file {'secretfile-abc11':
     path    => '/tmp/secretfile-abc11',
     ensure  => present,
     mode    => 0666,
-    source  => [$abcsecret11],
+    source  => $abcsecret11,
   }
 
   file {'secretfile-ceph':
     path    => '/tmp/secretfile-ceph',
     ensure  => present,
     mode    => 0666,
-    source  => [$cephsecret],
+    source  => $cephsecret,
   }
 }

@@ -14,7 +14,7 @@ You can use it via:
       path    => '/my/secretfile',
       ensure  => present,
       mode    => 0600,
-      source  => [$secret_path],
+      source  => $secret_path,
     }
 
 Secrets that don't exist will be generated for you.

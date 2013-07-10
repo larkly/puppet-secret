@@ -6,6 +6,7 @@ class secret-test {
   $abcsecret16 = secret('mykey-abc16', {'method' => 'alphabet', 'length' => 16 })
   $abcsecret11 = secret('mykey-abc11', {'method' => 'alphabet', 'bytes' => 11 })
   $cephsecret = secret('common-ceph', {'method' => 'ceph'})
+  $sharedabc = secret('sharone', {'method' => 'base64', 'secrets_mount' => 'shared-secrets'})
 
   file {'secretfile-bin':
     path    => '/tmp/secretfile-bin',
@@ -47,5 +48,12 @@ class secret-test {
     ensure  => present,
     mode    => 0666,
     source  => $cephsecret,
+  }
+
+  file {'secretfile-shared':
+    path    => '/tmp/secretfile-shared',
+    ensure  => present,
+    mode    => 0666,
+    source  => $sharedabc,
   }
 }

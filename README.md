@@ -25,7 +25,15 @@ If you follow the installation correctly, you have an easy ACL-secured per-node 
 Installation
 ------------
 
-1. Create a folder on puppet master where you want to store your secrets. Ideally, this should be outside of puppet configuration (and securely replicated ;) ).
+1. Clone from git:
+
+        git clone <source> puppet-secret
+
+2. Install to puppet
+
+        mv puppet-secret /etc/puppet/modules/secret
+
+3. Create a folder on puppet master where you want to store your secrets. Ideally, this should be outside of puppet configuration (and securely replicated ;) ).
 
         mkdir -p /secrets
 
@@ -33,13 +41,13 @@ Installation
 
         chown -R puppet:puppet /secrets
 
-2. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
+4. Configure this path in your `/etc/puppet/fileserver.conf`. Make sure it is on a per-node basis! (to do this, include the `%H` in the path as shown; this makes sure the node's FQDN is part of the access path)
 
         [secrets]
         path /secrets/%H/
         allow *.mydomain
 
-3. Use it. See examples.
+5. Use it. See examples.
 
 
 Options

@@ -126,6 +126,7 @@ module Secret
       when 'alphabet'   ; alphabet_secret bytes, IDENTIFIER_ALPHABET
       when 'default','' ; SecureRandom.random_bytes bytes
       when 'ceph'       ; ceph_secret
+      when 'uuid'       ; SecureRandom.uuid
       else                raise Puppet::ParseError, "don't understand method '#{opts['method']}' for secret generation. aborting."
       end
     end

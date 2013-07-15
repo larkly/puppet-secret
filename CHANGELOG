@@ -1,3 +1,4 @@
+0.8: added uuid secret provider
 0.7: added examples for shared secret
 0.6: added ceph secret provider
 0.5: integrated into travis-ci

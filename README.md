@@ -63,6 +63,7 @@ Options
   * `y64` := base64 encoded secret which is url-safe, e.g. `-biHariH.ovzvw`
     (replaces ` + / = ` with ` . _ - `) (see [y64 explained](http://www.yuiblog.com/blog/2010/07/06/in-the-yui-3-gallery-base64-and-y64-encoding/ "In the YUI 3 Gallery: Base64 and Y64 encoding"))
   * `alphabet` := generate secret from the `[a-zA-Z]` letterspace, e.g. `enbpaAyuFfYSHKx`
+  * `uuid` := generate UUID-based secret, e.g. `9b064a5c-0b2b-4162-b938-a43704c77602`
   * `ceph` := generate secret for ceph via `ceph-authtool`. For this, the tool must exist on the server. On ubuntu you get it by installing `ceph-common`.
 
 more examples:

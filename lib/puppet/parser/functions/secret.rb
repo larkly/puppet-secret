@@ -14,6 +14,30 @@ Puppet::Parser::Functions::newfunction(:secret, :type => :rvalue) do |vals|
   return "puppet:///#{opts['secrets_mount']}/#{secretid}"
 end
 
+require 'securerandom'
+# Backport of missing SecureRandom methods from 1.9
+# http://softover.com/UUID_in_Ruby_1.8
+module SecureRandom
+  class << self
+    def method_missing(method_sym, *arguments, &block)
+      case method_sym
+      when :uuid
+        r19_uuid(*arguments)
+      else
+        super
+      end
+    end
+
+    private
+    def r19_uuid
+      ary = random_bytes(16).unpack("NnnnnN")
+      ary[2] = (ary[2] & 0x0fff) | 0x4000
+      ary[3] = (ary[3] & 0x3fff) | 0x8000
+      "%08x-%04x-%04x-%04x-%04x%08x" % ary
+    end
+  end
+end
+
 module Secret
   class << self
     # global definitions, adjust to your liking
@@ -34,8 +58,6 @@ module Secret
     end
 
     def generate_secret opts = {}
-      require 'securerandom'
-
       # how bytes in the secret
       method = opts['method'].to_s
       len = opts['length'].to_i

@@ -1,4 +1,4 @@
-test/.vagrant
+.vagrant
 vendor/gems/
 .bundle/
 Gemfile.lock
